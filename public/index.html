@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Finder</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('car-background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fefeff; /* BMW Blue */
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(223, 9, 9, 0); /* Slightly transparent white */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.98);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ffffff; /* BMW Blue */
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #0033A0; /* BMW Blue */
+            color: #fdfafa;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Full-width button */
+            box-sizing: border-box;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 150px; /* Adjust as needed */
+        }
+
+        button:hover {
+            background-color: #800013; /* Darker Blue */
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9fa;
+            border-radius: 8px;
+            border: 1px solid #0539a6;
+            box-shadow: 0 4px 8px rgba(19, 1, 1, 0.98);
+        }
+
+        .results div {
+            margin-bottom: 15px;
+        }
+
+        .error {
+            color: #0787cc; /* Error Blue */
+            font-weight: bold;
+        }
+        #compare-cars-button {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #0056b3; /* Button background color */
+            color: #ffffff; /* Text color */
+            text-decoration: none; /* Remove underline */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            transition: background-color 0.3s, transform 0.3s; /* Animation */
+        }
+
+        #compare-cars-button:hover {
+            background-color: #003d7a; /* Darker background on hover */
+            transform: translateY(-2px); /* Lift effect on hover */
+        }
+
+        @media (max-width: 768px) {
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            select, input {
+                padding: 10px;
+            }
+
+            button {
+                padding: 10px 15px;
+            }
+            
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="bmw-logo-683.png" alt="BMW Logo" class="logo">
+        <h1>Find Car Prices</h1>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="compare.html" id="compare-cars-button">Compare Cars Price</a>
+        </div>
+        <div class="form-group">
+            <label for="car-brand">Select Car Brand:</label>
+            <select id="car-brand">
+                <option value="">Select Car Brand</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="car-name">Select Car Model:</label>
+            <select id="car-name">
+                <option value="">Select Car Model</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="fuel-type">Select Fuel Type:</label>
+            <select id="fuel-type">
+                <option value="">Select Fuel Type</option>
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="kilometers-driven">Kilometers Driven:</label>
+            <input type="number" id="kilometers-driven" min="0">
+        </div>
+        <div class="form-group">
+            <label for="scratches-dents">Scratches/Dents:</label>
+            <select id="scratches-dents">
+                <option value="">Scratches/Dents</option>
+                <option value="Car is very clean and looking new">Car is very clean and looking new</option>
+                <option value="Minor scratches but no dents">Minor scratches but no dents</option>
+                <option value="Minor scratches and dents">Minor scratches and dents</option>
+                <option value="Highly noticable scratches but no dents">Highly noticable scratches but no dents</option>
+                <option value="Highly noticable scratches and dents">Highly noticable scratches and dents</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="engine-condition">Engine Condition:</label>
+            <select id="engine-condition">
+                <option value="">Select</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Poor">Poor</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="no-of-drivers">Ownership:</label>
+            <input type="number" id="no-of-drivers" min="0">
+        </div>
+        <button id="find-prices">Find Price</button>
+        <div class="results">
+            <div id="error-message" class="error"></div>
+            <div id="release-date-output"></div>
+            <div id="original-price"></div>
+            <div id="resale-price"></div>
+        </div>
+    </div>
+    <script>
+    
+    
+    document.addEventListener('DOMContentLoaded', function() {
+            const cars = [
+            { "brand": "Toyota", "name": "Corolla", "fuelType": "Petrol", "releaseDate": 2018, "originalPrice": 1660000, "resalePrice": 1245000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 1 },
+    { "brand": "Toyota", "name": "Camry", "fuelType": "Hybrid", "releaseDate": 2019, "originalPrice": 2075000, "resalePrice": 1665000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Toyota", "name": "RAV4", "fuelType": "Petrol", "releaseDate": 2017, "originalPrice": 2241000, "resalePrice": 1577000, "kilometersDriven": 40000, "scratchesDents": "Yes", "engineCondition": "Fair", "noOfDrivers": 2 },
+    { "brand": "Toyota", "name": "Hilux", "fuelType": "Diesel", "releaseDate": 2020, "originalPrice": 2500000, "resalePrice": 2400000, "kilometersDriven": 30000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 2 },
+    { "brand": "Toyota", "name": "Fortuner", "fuelType": "Diesel", "releaseDate": 2020, "originalPrice": 3000000, "resalePrice": 2900000, "kilometersDriven": 25000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 3 },
+    { "brand": "Toyota", "name": "Innova Crysta", "fuelType": "Diesel", "releaseDate": 2020, "originalPrice": 2700000, "resalePrice": 2600000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 2 },
+    { "brand": "Toyota", "name": "Land Cruiser Prado", "fuelType": "Diesel", "releaseDate": 2019, "originalPrice": 3500000, "resalePrice": 3400000, "kilometersDriven": 40000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 3 },
+    { "brand": "Toyota", "name": "Land Cruiser", "fuelType": "Diesel", "releaseDate": 2018, "originalPrice": 5000000, "resalePrice": 4800000, "kilometersDriven": 50000, "scratchesDents": "Yes", "engineCondition": "Fair", "noOfDrivers": 4 },
+    { "brand": "Toyota", "name": "RAV4 (2023)", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 2800000, "resalePrice": 2700000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Toyota", "name": "Highlander", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 3200000, "resalePrice": 3100000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 2 },
+    { "brand": "Toyota", "name": "Supra", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 10500000, "resalePrice": 10000000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Toyota", "name": "C-HR", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 2200000, "resalePrice": 2100000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Honda", "name": "City", "fuelType": "Petrol", "releaseDate": 2019, "originalPrice": 1150000, "resalePrice": 900000, "kilometersDriven": 25000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Honda", "name": "Civic", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 1750000, "resalePrice": 1400000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Honda", "name": "Civic Type R", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 5000000, "resalePrice": 4800000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Honda", "name": "Accord", "fuelType": "Hybrid", "releaseDate": 2021, "originalPrice": 4500000, "resalePrice": 4000000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Honda", "name": "CR-V", "fuelType": "Petrol", "releaseDate": 2018, "originalPrice": 2850000, "resalePrice": 2200000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Honda", "name": "Jazz", "fuelType": "Petrol", "releaseDate": 2019, "originalPrice": 800000, "resalePrice": 650000, "kilometersDriven": 18000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Honda", "name": "WR-V", "fuelType": "Diesel", "releaseDate": 2020, "originalPrice": 1050000, "resalePrice": 900000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Honda", "name": "Amaze", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 850000, "resalePrice": 750000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Honda", "name": "Brio", "fuelType": "Petrol", "releaseDate": 2017, "originalPrice": 550000, "resalePrice": 400000, "kilometersDriven": 35000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Honda", "name": "BR-V", "fuelType": "Diesel", "releaseDate": 2018, "originalPrice": 1300000, "resalePrice": 1000000, "kilometersDriven": 28000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Honda", "name": "HR-V", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1500000, "resalePrice": 1400000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "EcoSport", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 1100000, "resalePrice": 900000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "Endeavour", "fuelType": "Diesel", "releaseDate": 2021, "originalPrice": 3500000, "resalePrice": 3000000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "Figo", "fuelType": "Petrol", "releaseDate": 2019, "originalPrice": 700000, "resalePrice": 550000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "Mustang", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 7500000, "resalePrice": 7000000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "Fusion", "fuelType": "Hybrid", "releaseDate": 2018, "originalPrice": 2200000, "resalePrice": 1800000, "kilometersDriven": 25000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "Escape", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 2800000, "resalePrice": 2500000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "Ranger", "fuelType": "Diesel", "releaseDate": 2020, "originalPrice": 3500000, "resalePrice": 3200000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Ford", "name": "Mondeo", "fuelType": "Petrol", "releaseDate": 2019, "originalPrice": 2500000, "resalePrice": 2200000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "Tourneo", "fuelType": "Diesel", "releaseDate": 2021, "originalPrice": 4000000, "resalePrice": 3500000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ford", "name": "Transit", "fuelType": "Diesel", "releaseDate": 2018, "originalPrice": 3000000, "resalePrice": 2700000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Ford", "name": "Bronco", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 5000000, "resalePrice": 4800000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "BMW", "name": "3 Series", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 4700000, "resalePrice": 4000000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "BMW", "name": "5 Series", "fuelType": "Diesel", "releaseDate": 2018, "originalPrice": 6750000, "resalePrice": 5500000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "BMW", "name": "X5", "fuelType": "Petrol", "releaseDate": 2017, "originalPrice": 9300000, "resalePrice": 7000000, "kilometersDriven": 50000, "scratchesDents": "No", "engineCondition": "Fair", "noOfDrivers": 3 },
+    { "brand": "BMW", "name": "Z4", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 8900000, "resalePrice": 7500000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "BMW", "name": "i4", "fuelType": "Electric", "releaseDate": 2022, "originalPrice": 7350000, "resalePrice": 6500000, "kilometersDriven": 8000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "BMW", "name": "iX", "fuelType": "Electric", "releaseDate": 2023, "originalPrice": 10500000, "resalePrice": 9500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "BMW", "name": "7 Series", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 14500000, "resalePrice": 12500000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "BMW", "name": "X3", "fuelType": "Diesel", "releaseDate": 2019, "originalPrice": 7700000, "resalePrice": 6500000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 2 },
+    { "brand": "BMW", "name": "M3", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 14500000, "resalePrice": 13000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "BMW", "name": "M5", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 18500000, "resalePrice": 16500000, "kilometersDriven": 8000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "BMW", "name": "X7", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 12500000, "resalePrice": 11000000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "A3", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 3500000, "resalePrice": 3000000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "A4", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 4500000, "resalePrice": 4000000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "A6", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 6000000, "resalePrice": 5500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "Q3", "fuelType": "Diesel", "releaseDate": 2021, "originalPrice": 4500000, "resalePrice": 4000000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "Q5", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 6000000, "resalePrice": 5500000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "Q7", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 8000000, "resalePrice": 7500000, "kilometersDriven": 7000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "Q8", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 10000000, "resalePrice": 9500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "RS7", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 15000000, "resalePrice": 14000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "S5", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 8000000, "resalePrice": 7500000, "kilometersDriven": 8000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Audi", "name": "TT", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 7000000, "resalePrice": 6500000, "kilometersDriven": 9000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "A-Class", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 4500000, "resalePrice": 4000000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "C-Class", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 6000000, "resalePrice": 5500000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "E-Class", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 8000000, "resalePrice": 7500000, "kilometersDriven": 7000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "S-Class", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 15000000, "resalePrice": 14000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "GLA", "fuelType": "Diesel", "releaseDate": 2022, "originalPrice": 4500000, "resalePrice": 4000000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "GLC", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 6000000, "resalePrice": 5500000, "kilometersDriven": 8000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "GLE", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 8500000, "resalePrice": 8000000, "kilometersDriven": 6000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "GLS", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 10000000, "resalePrice": 9500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "G-Class", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 20000000, "resalePrice": 19000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mercedes-Benz", "name": "AMG GT", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 25000000, "resalePrice": 24000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Polo", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 800000, "resalePrice": 700000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Vento", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 1200000, "resalePrice": 1100000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Tiguan", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 3300000, "resalePrice": 3200000, "kilometersDriven": 8000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Taigun", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1600000, "resalePrice": 1500000, "kilometersDriven": 6000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Passat", "fuelType": "Diesel", "releaseDate": 2022, "originalPrice": 3000000, "resalePrice": 2800000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Jetta", "fuelType": "Diesel", "releaseDate": 2021, "originalPrice": 2000000, "resalePrice": 1800000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "T-Roc", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 2100000, "resalePrice": 2000000, "kilometersDriven": 7000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Virtus", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1500000, "resalePrice": 1400000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Beetle", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 2700000, "resalePrice": 2500000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Volkswagen", "name": "Ameo", "fuelType": "Diesel", "releaseDate": 2021, "originalPrice": 1100000, "resalePrice": 1000000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Chevrolet", "name": "Beat", "fuelType": "Petrol", "releaseDate": 2019, "originalPrice": 700000, "resalePrice": 500000, "kilometersDriven": 25000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Chevrolet", "name": "Cruze", "fuelType": "Diesel", "releaseDate": 2018, "originalPrice": 1600000, "resalePrice": 1200000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Chevrolet", "name": "Tavera", "fuelType": "Diesel", "releaseDate": 2017, "originalPrice": 1200000, "resalePrice": 800000, "kilometersDriven": 50000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 3 },
+    { "brand": "Chevrolet", "name": "Spark", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 500000, "resalePrice": 350000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Chevrolet", "name": "Sail", "fuelType": "Petrol", "releaseDate": 2018, "originalPrice": 600000, "resalePrice": 400000, "kilometersDriven": 28000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Chevrolet", "name": "Trailblazer", "fuelType": "Diesel", "releaseDate": 2020, "originalPrice": 2700000, "resalePrice": 2200000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Chevrolet", "name": "Enjoy", "fuelType": "Diesel", "releaseDate": 2019, "originalPrice": 1000000, "resalePrice": 700000, "kilometersDriven": 35000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Chevrolet", "name": "Captiva", "fuelType": "Diesel", "releaseDate": 2017, "originalPrice": 2500000, "resalePrice": 1800000, "kilometersDriven": 40000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Chevrolet", "name": "Optra", "fuelType": "Petrol", "releaseDate": 2018, "originalPrice": 800000, "resalePrice": 600000, "kilometersDriven": 30000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Chevrolet", "name": "Orlando", "fuelType": "Diesel", "releaseDate": 2019, "originalPrice": 2200000, "resalePrice": 1700000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "i10", "fuelType": "Petrol", "releaseDate": 2018, "originalPrice": 600000, "resalePrice": 450000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "i20", "fuelType": "Diesel", "releaseDate": 2020, "originalPrice": 800000, "resalePrice": 650000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "i20", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 900000, "resalePrice": 850000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "i20 N Line", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1200000, "resalePrice": 1150000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Verna", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 1200000, "resalePrice": 1000000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Verna", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1300000, "resalePrice": 1250000, "kilometersDriven": 6000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Verna N Line", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1600000, "resalePrice": 1550000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Creta", "fuelType": "Diesel", "releaseDate": 2019, "originalPrice": 1500000, "resalePrice": 1300000, "kilometersDriven": 25000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Hyundai", "name": "Creta", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 1700000, "resalePrice": 1650000, "kilometersDriven": 7000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Creta N Line", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 2000000, "resalePrice": 1950000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Venue", "fuelType": "Diesel", "releaseDate": 2021, "originalPrice": 1100000, "resalePrice": 950000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Venue", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1250000, "resalePrice": 1200000, "kilometersDriven": 6000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Venue N Line", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1400000, "resalePrice": 1350000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Tucson", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 2500000, "resalePrice": 2200000, "kilometersDriven": 8000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Elantra", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 1700000, "resalePrice": 1400000, "kilometersDriven": 18000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Hyundai", "name": "Santro", "fuelType": "Petrol", "releaseDate": 2018, "originalPrice": 500000, "resalePrice": 350000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Hyundai", "name": "Kona Electric", "fuelType": "Electric", "releaseDate": 2022, "originalPrice": 2400000, "resalePrice": 2100000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "RX 500h F SPORT", "fuelType": "Hybrid", "releaseDate": 2023, "originalPrice": 15000000, "resalePrice": 14500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "RX 350", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 12000000, "resalePrice": 11500000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "NX 350h", "fuelType": "Hybrid", "releaseDate": 2023, "originalPrice": 14000000, "resalePrice": 13500000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "ES 300h", "fuelType": "Hybrid", "releaseDate": 2023, "originalPrice": 11000000, "resalePrice": 10500000, "kilometersDriven": 2500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "LC 500", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 20000000, "resalePrice": 19000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "LX 600", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 25000000, "resalePrice": 24000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "UX 300e", "fuelType": "Electric", "releaseDate": 2023, "originalPrice": 10000000, "resalePrice": 9500000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "GS 300h", "fuelType": "Hybrid", "releaseDate": 2023, "originalPrice": 12000000, "resalePrice": 11500000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "RX 450h", "fuelType": "Hybrid", "releaseDate": 2022, "originalPrice": 13000000, "resalePrice": 12500000, "kilometersDriven": 6000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lexus", "name": "NX 250", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 13000000, "resalePrice": 12500000, "kilometersDriven": 3500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "911 Carrera", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 15000000, "resalePrice": 14500000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "911 Turbo", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 22000000, "resalePrice": 21000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "Panamera", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 25000000, "resalePrice": 24000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "Cayenne", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 30000000, "resalePrice": 29000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "Macan", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 16000000, "resalePrice": 15500000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "Taycan", "fuelType": "Electric", "releaseDate": 2023, "originalPrice": 35000000, "resalePrice": 34000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "911 GT3", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 30000000, "resalePrice": 29000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "911 GT2 RS", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 40000000, "resalePrice": 38000000, "kilometersDriven": 1000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "718 Cayman", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 12000000, "resalePrice": 11500000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "718 Boxster", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 13000000, "resalePrice": 12500000, "kilometersDriven": 2500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Porsche", "name": "Cayenne Coupe", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 33000000, "resalePrice": 32000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "XE", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 4500000, "resalePrice": 4200000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "XF", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 5500000, "resalePrice": 5200000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "XJ", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 8000000, "resalePrice": 7500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "F-Type", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 10000000, "resalePrice": 9500000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "E-Pace", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 5500000, "resalePrice": 5000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "F-Pace", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 7000000, "resalePrice": 6500000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "I-Pace", "fuelType": "Electric", "releaseDate": 2023, "originalPrice": 9000000, "resalePrice": 8500000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "XK", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 12000000, "resalePrice": 11500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "F-Type R", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 13000000, "resalePrice": 12500000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "E-Pace R-Dynamic", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 6000000, "resalePrice": 5700000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Jaguar", "name": "F-Pace SVR", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 9000000, "resalePrice": 8600000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Continental GT", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 40000000, "resalePrice": 38000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Flying Spur", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 45000000, "resalePrice": 43000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Bentayga", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 60000000, "resalePrice": 57000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Mulsanne", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 70000000, "resalePrice": 67000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Continental GT Speed", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 45000000, "resalePrice": 43000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Bentayga Speed", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 75000000, "resalePrice": 72000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Continental GT V8", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 42000000, "resalePrice": 40000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Flying Spur V8", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 46000000, "resalePrice": 44000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Bentley Mulsanne Speed", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 80000000, "resalePrice": 77000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Continental GT Mulliner", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 50000000, "resalePrice": 48000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Bentley", "name": "Bentayga Hybrid", "fuelType": "Hybrid", "releaseDate": 2023, "originalPrice": 65000000, "resalePrice": 62000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Phantom", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 80000000, "resalePrice": 77000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Ghost", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 90000000, "resalePrice": 86000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Cullinan", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 100000000, "resalePrice": 95000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Dawn", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 70000000, "resalePrice": 67000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Wraith", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 65000000, "resalePrice": 62000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Rolls-Royce Phantom Extended", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 90000000, "resalePrice": 87000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Rolls-Royce Dawn Black Badge", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 75000000, "resalePrice": 72000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Rolls-Royce Wraith Black Badge", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 70000000, "resalePrice": 67000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Cullinan Black Badge", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 105000000, "resalePrice": 100000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Ghost Black Badge", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 95000000, "resalePrice": 90000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Rolls-Royce", "name": "Phantom VIII", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 82000000, "resalePrice": 79000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Altroz", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 600000, "resalePrice": 550000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Nexon", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 900000, "resalePrice": 850000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Nexon EV", "fuelType": "Electric", "releaseDate": 2023, "originalPrice": 1400000, "resalePrice": 1350000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Harrier", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 1600000, "resalePrice": 1500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Safari", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 1900000, "resalePrice": 1800000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Tiago", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 500000, "resalePrice": 450000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Tigor", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 550000, "resalePrice": 500000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Hexa", "fuelType": "Diesel", "releaseDate": 2022, "originalPrice": 2200000, "resalePrice": 2000000, "kilometersDriven": 20000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Tata", "name": "Zest", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 800000, "resalePrice": 650000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Tata", "name": "Altroz EV", "fuelType": "Electric", "releaseDate": 2023, "originalPrice": 1300000, "resalePrice": 1250000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "Thar", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1500000, "resalePrice": 1400000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "Thar", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 1600000, "resalePrice": 1500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "XUV700", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 2500000, "resalePrice": 2400000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "XUV700", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 2700000, "resalePrice": 2600000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "Scorpio", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 1800000, "resalePrice": 1700000, "kilometersDriven": 6000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "Bolero", "fuelType": "Diesel", "releaseDate": 2022, "originalPrice": 1200000, "resalePrice": 1100000, "kilometersDriven": 20000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Mahindra", "name": "Alturas G4", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 3000000, "resalePrice": 2900000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "KUV100", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 800000, "resalePrice": 700000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "XUV300", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 1200000, "resalePrice": 1100000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "XUV500", "fuelType": "Diesel", "releaseDate": 2021, "originalPrice": 1500000, "resalePrice": 1400000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Mahindra", "name": "eVerito", "fuelType": "Electric", "releaseDate": 2022, "originalPrice": 1300000, "resalePrice": 1200000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Alto", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 400000, "resalePrice": 300000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Swift", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 700000, "resalePrice": 650000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Baleno", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 900000, "resalePrice": 850000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Vitara Brezza", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1200000, "resalePrice": 1150000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Ertiga", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1500000, "resalePrice": 1400000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "S-Cross", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1600000, "resalePrice": 1550000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Celerio", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 600000, "resalePrice": 550000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Grand Vitara", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 2000000, "resalePrice": 1900000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Alto K10", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 500000, "resalePrice": 450000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "Ignis", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 700000, "resalePrice": 650000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Suzuki", "name": "XL6", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1800000, "resalePrice": 1700000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "Micra", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 600000, "resalePrice": 500000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "Sunny", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1200000, "resalePrice": 1150000, "kilometersDriven": 7000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "Altima", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 2500000, "resalePrice": 2400000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "Kicks", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 1400000, "resalePrice": 1300000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "Terrano", "fuelType": "Diesel", "releaseDate": 2022, "originalPrice": 1800000, "resalePrice": 1600000, "kilometersDriven": 20000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 2 },
+    { "brand": "Nissan", "name": "Juke", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 2000000, "resalePrice": 1900000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "GT-R", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 24000000, "resalePrice": 23000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "370Z", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 3000000, "resalePrice": 2900000, "kilometersDriven": 1500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "X-Trail", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 2200000, "resalePrice": 2100000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "Armada", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 3500000, "resalePrice": 3400000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "Rogue", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 2000000, "resalePrice": 1900000, "kilometersDriven": 6000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Nissan", "name": "Magnite", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 750000, "resalePrice": 700000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "488 GTB", "fuelType": "Petrol", "releaseDate": 2019, "originalPrice": 33000000, "resalePrice": 30000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "F8 Tributo", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 35000000, "resalePrice": 32000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "812 Superfast", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 40000000, "resalePrice": 38000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "Portofino", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 25000000, "resalePrice": 23000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "SF90 Stradale", "fuelType": "Hybrid", "releaseDate": 2022, "originalPrice": 60000000, "resalePrice": 57000000, "kilometersDriven": 1000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "Roma", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 28000000, "resalePrice": 26000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "GTC4Lusso", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 35000000, "resalePrice": 33000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "LaFerrari", "fuelType": "Hybrid", "releaseDate": 2020, "originalPrice": 70000000, "resalePrice": 65000000, "kilometersDriven": 1000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "488 Pista", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 37000000, "resalePrice": 34000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "Monza SP1", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 50000000, "resalePrice": 48000000, "kilometersDriven": 500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Ferrari", "name": "Monza SP2", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 52000000, "resalePrice": 50000000, "kilometersDriven": 500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Huracán EVO", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 37000000, "resalePrice": 35000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Huracán STO", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 44000000, "resalePrice": 42000000, "kilometersDriven": 1000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Aventador S", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 60000000, "resalePrice": 58000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Aventador SVJ", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 70000000, "resalePrice": 67000000, "kilometersDriven": 1500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Urus", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 32000000, "resalePrice": 30000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Urus Performante", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 40000000, "resalePrice": 38000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Sian FKP 37", "fuelType": "Hybrid", "releaseDate": 2021, "originalPrice": 80000000, "resalePrice": 75000000, "kilometersDriven": 1000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Sián Roadster", "fuelType": "Hybrid", "releaseDate": 2022, "originalPrice": 85000000, "resalePrice": 80000000, "kilometersDriven": 500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Centenario", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 90000000, "resalePrice": 85000000, "kilometersDriven": 500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Reventón", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 95000000, "resalePrice": 90000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Lamborghini", "name": "Aventador Ultimae", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 75000000, "resalePrice": 72000000, "kilometersDriven": 1000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "Ghibli", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 12000000, "resalePrice": 11500000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "Ghibli", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 13000000, "resalePrice": 12500000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "Quattroporte", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 15000000, "resalePrice": 14000000, "kilometersDriven": 8000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "Quattroporte", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 16000000, "resalePrice": 15000000, "kilometersDriven": 4000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "Levante", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 17000000, "resalePrice": 16000000, "kilometersDriven": 12000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "Levante", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 18000000, "resalePrice": 17000000, "kilometersDriven": 7000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "Alfieri", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 25000000, "resalePrice": 24000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "GranTurismo", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 30000000, "resalePrice": 29000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "GranTurismo", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 32000000, "resalePrice": 31000000, "kilometersDriven": 2000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "MC20", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 35000000, "resalePrice": 34000000, "kilometersDriven": 1000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Maserati", "name": "MC20", "fuelType": "Petrol", "releaseDate": 2023, "originalPrice": 36000000, "resalePrice": 35000000, "kilometersDriven": 500, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Evoque", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 7000000, "resalePrice": 6500000, "kilometersDriven": 15000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Evoque", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 7500000, "resalePrice": 7000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Velar", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 9000000, "resalePrice": 8500000, "kilometersDriven": 10000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Velar", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 9500000, "resalePrice": 9000000, "kilometersDriven": 6000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Sport", "fuelType": "Petrol", "releaseDate": 2020, "originalPrice": 12000000, "resalePrice": 11000000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Sport", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 13000000, "resalePrice": 12000000, "kilometersDriven": 8000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Autobiography", "fuelType": "Petrol", "releaseDate": 2022, "originalPrice": 20000000, "resalePrice": 19000000, "kilometersDriven": 5000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Autobiography", "fuelType": "Diesel", "releaseDate": 2023, "originalPrice": 21000000, "resalePrice": 20000000, "kilometersDriven": 3000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Range Rover", "name": "Defender", "fuelType": "Petrol", "releaseDate": 2021, "originalPrice": 16000000, "resalePrice": 15000000, "kilometersDriven": 7000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 }
+];
+
+            const carBrandSelect = document.getElementById('car-brand');
+            const carNameSelect = document.getElementById('car-name');
+            const fuelTypeSelect = document.getElementById('fuel-type');
+            const kilometersDrivenInput = document.getElementById('kilometers-driven');
+            const scratchesDentsSelect = document.getElementById('scratches-dents');
+            const engineConditionSelect = document.getElementById('engine-condition');
+            const noOfDriversInput = document.getElementById('no-of-drivers');
+            const findPricesButton = document.getElementById('find-prices');
+            const releaseDateOutput = document.getElementById('release-date-output');
+            const originalPriceOutput = document.getElementById('original-price');
+            const resalePriceOutput = document.getElementById('resale-price');
+            const errorMessageOutput = document.getElementById('error-message');
+            
+            function populateCarBrands() {
+                const brands = [...new Set(cars.map(car => car.brand))];
+                carBrandSelect.innerHTML = '<option value="">Select Car Brand</option>';
+                brands.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    carBrandSelect.appendChild(option);
+                });
+            }
+
+            function populateCarNames(brand) {
+                const names = [...new Set(cars.filter(car => car.brand === brand).map(car => car.name))];
+                carNameSelect.innerHTML = '<option value="">Select Car Model</option>';
+                names.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    carNameSelect.appendChild(option);
+                });
+            }
+
+            function calculateResalePrice(originalPrice, kilometersDriven, scratchesDents, engineCondition, noOfDrivers) {
+                let resalePrice = originalPrice;
+
+                // Decrease resale price based on kilometers driven
+                resalePrice -= kilometersDriven * 0.9; // Reduce by 0.9 for every kilometer driven
+
+                // Adjust resale price based on scratches/dents
+                if (scratchesDents === 'Minor scratches but no dents') {
+    resalePrice -= resalePrice * 0.05; // Reduce by 5% for minor scratches and no dents
+} else if (scratchesDents === 'Minor scratches and dents') {
+    resalePrice -= resalePrice * 0.10; // Reduce by 10% for minor scratches and dents
+} else if (scratchesDents === 'Highly noticeable scratches but no dents') {
+    resalePrice -= resalePrice * 0.15; // Reduce by 15% for highly noticeable scratches and no dents
+} else if (scratchesDents === 'Highly noticeable scratches and dents') {
+    resalePrice -= resalePrice * 0.25; // Reduce by 25% for highly noticeable scratches and dents
+} else if (scratchesDents === 'Very clean and looking new') {
+    resalePrice -= resalePrice * 0.02; // Reduce by 2% for a very clean car with minor cosmetic issues
+} else {
+    // No reduction if the car is in excellent condition or unknown condition
+    resalePrice -= 0;
+}
+
+
+                // Adjust resale price based on engine condition
+                switch (engineCondition) {
+                    
+    case "Excellent":
+        // Decrease resale price by 5% for excellent condition
+        resalePrice -= resalePrice * 0.05; // 5% reduction
+        break;
+    case "Good":
+        // Decrease resale price by 10% for good condition
+        resalePrice -= resalePrice * 0.10; // 10% reduction
+        break;
+    case "Fair":
+        // Decrease resale price by 20% for fair condition
+        resalePrice -= resalePrice * 0.20; // 20% reduction
+        break;
+    case "Poor":
+        // Decrease resale price by 40% for poor condition
+        resalePrice -= resalePrice * 0.40; // 40% reduction
+        break;
+    default:
+        // No change for unknown or unhandled conditions
+        break;
+}
+
+    
+                // Decrease resale price based on number of drivers
+    resalePrice -= noOfDrivers * 30000; // Reduce by 30000 per driver
+
+// Ensure resale price does not drop below 80% of original price
+if (resalePrice < originalPrice * 0.01) {
+    resalePrice = originalPrice * 0.01;
+}
+
+return resalePrice;
+}
+
+
+        function updateCarDetails() {
+const selectedBrand = carBrandSelect.value;
+const selectedName = carNameSelect.value;
+const selectedFuelType = fuelTypeSelect.value;
+const kilometersDriven = parseInt(kilometersDrivenInput.value, 10);
+const scratchesDents = scratchesDentsSelect.value;
+const engineCondition = engineConditionSelect.value;
+const noOfDrivers = parseInt(noOfDriversInput.value, 10);
+
+errorMessageOutput.textContent = '';
+
+// Validate inputs
+if (!selectedBrand || !selectedName || !selectedFuelType || isNaN(kilometersDriven) || isNaN(noOfDrivers)) {
+    errorMessageOutput.textContent = 'Please fill in all fields correctly.';
+    return;
+}
+
+const car = cars.find(car =>
+    car.brand === selectedBrand &&
+    car.name === selectedName
+);
+
+if (car) {
+    if (car.fuelType === selectedFuelType) {
+        const adjustedResalePrice = calculateResalePrice(car.originalPrice, kilometersDriven, scratchesDents, engineCondition, noOfDrivers);
+        releaseDateOutput.textContent = `Release Date: ${car.releaseDate}`;
+        originalPriceOutput.textContent = `Original Price: ₹${car.originalPrice.toLocaleString()}`;
+        resalePriceOutput.textContent = `Resale Price: ₹${adjustedResalePrice.toLocaleString()}`;
+    } else {
+        errorMessageOutput.textContent = `This car is only available with ${car.fuelType} fuel type. Please select the correct fuel type.`;
+        releaseDateOutput.textContent = '';
+        originalPriceOutput.textContent = '';
+        resalePriceOutput.textContent = '';
+
+    }
+} else {
+    errorMessageOutput.textContent = 'Car not found.';
+    releaseDateOutput.textContent = '';
+    originalPriceOutput.textContent = '';
+    resalePriceOutput.textContent = '';
+
+}
+}
+
+
+        carBrandSelect.addEventListener('change', (event) => {
+            populateCarNames(event.target.value);
+        });
+
+        findPricesButton.addEventListener('click', updateCarDetails);
+
+        populateCarBrands();
+    });
+</script>
+</body>
+</html>

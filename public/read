@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Finder</title>
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('car-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+h1 {
+    text-align: center;
+    color: #fefeff; /* BMW Blue */
+    margin-bottom: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(223, 9, 9, 0); /* Slightly transparent white */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.98);
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #ffffff; /* BMW Blue */
+}
+
+select, input {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #0033A0; /* BMW Blue */
+    color: #fdfafa;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Full-width button */
+    box-sizing: border-box;
+}
+.logo {
+    display: block;
+    margin: 0 auto 20px;
+    width: 150px; /* Adjust as needed */
+}
+
+
+button:hover {
+    background-color: #800013; /* Darker Blue */
+}
+
+.results {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9fa;
+    border-radius: 8px;
+    border: 1px solid #0539a6;
+    box-shadow: 0 4px 8px rgba(19, 1, 1, 0.98);
+}
+
+.results div {
+    margin-bottom: 15px;
+}
+
+.error {
+    color: #0787cc; /* Error Red */
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    select, input {
+        padding: 10px;
+    }
+
+    button {
+        padding: 10px 15px;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="bmw-logo-683.png" alt="BMW Logo" class="logo">
+        <h1>Find Car Prices</h1>
+        <div class="form-group">
+            <label for="car-brand">Select Car Brand:</label>
+            <select id="car-brand">
+                <option value="">Select Car Brand</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="car-name">Select Car Model:</label>
+            <select id="car-name">
+                <option value="">Select Car Model</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="fuel-type">Select Fuel Type:</label>
+            <select id="fuel-type">
+                <option value="">Select Fuel Type</option>
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="kilometers-driven">Kilometers Driven:</label>
+            <input type="number" id="kilometers-driven" min="0">
+        </div>
+        <div class="form-group">
+            <label for="scratches-dents">Scratches/Dents:</label>
+            <select id="scratches-dents">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="engine-condition">Engine Condition:</label>
+            <select id="engine-condition">
+                <option value="">Select</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Poor">Poor</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="no-of-drivers">Ownership:</label>
+            <input type="number" id="no-of-drivers" min="0">
+        </div>
+        <button id="find-prices">Find Price</button>
+        <div class="results">
+            <div id="error-message" class="error"></div>
+            <div id="release-date-output"></div>
+            <div id="original-price"></div>
+            <div id="resale-price"></div>
+        </div>
+    </div style="text-align: center; margin-top: 20px;">
+    <a href="compare.html" style="color: #fefeff; text-decoration: underline;">Compare Cars</a>
+</div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cars = [
+    { "brand": "Toyota", "name": "Corolla", "fuelType": "Petrol", "releaseDate": 2018, "originalPrice": 1660000, "resalePrice": 1245000, "kilometersDriven": 30000, "scratchesDents": "Yes", "engineCondition": "Good", "noOfDrivers": 1 },
+    { "brand": "Toyota", "name": "Camry", "fuelType": "Hybrid", "releaseDate": 2019, "originalPrice": 2075000, "resalePrice": 1665000, "kilometersDriven": 20000, "scratchesDents": "No", "engineCondition": "Excellent", "noOfDrivers": 1 },
+    { "brand": "Toyota", "name": "RAV4", "fuelType": "Petrol", "releaseDate": 2017, "originalPrice": 2241000, "resalePrice": 1577000, "kilometersDriven": 40000, "scratchesDents": "Yes", "engineCondition": "Fair", "noOfDrivers": 2 },
+];
+
+            const carBrandSelect = document.getElementById('car-brand');
+            const carNameSelect = document.getElementById('car-name');
+            const fuelTypeSelect = document.getElementById('fuel-type');
+            const kilometersDrivenInput = document.getElementById('kilometers-driven');
+            const scratchesDentsSelect = document.getElementById('scratches-dents');
+            const engineConditionSelect = document.getElementById('engine-condition');
+            const noOfDriversInput = document.getElementById('no-of-drivers');
+            const findPricesButton = document.getElementById('find-prices');
+            const releaseDateOutput = document.getElementById('release-date-output');
+            const originalPriceOutput = document.getElementById('original-price');
+            const resalePriceOutput = document.getElementById('resale-price');
+            const errorMessageOutput = document.getElementById('error-message');
+
+            function populateCarBrands() {
+                const brands = [...new Set(cars.map(car => car.brand))];
+                carBrandSelect.innerHTML = '<option value="">Select Car Brand</option>';
+                brands.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    carBrandSelect.appendChild(option);
+                });
+            }
+
+            function populateCarNames(brand) {
+                const names = [...new Set(cars.filter(car => car.brand === brand).map(car => car.name))];
+                carNameSelect.innerHTML = '<option value="">Select Car Model</option>';
+                names.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    carNameSelect.appendChild(option);
+                });
+            }
+
+            function calculateResalePrice(originalPrice, kilometersDriven, scratchesDents, engineCondition, noOfDrivers) {
+    let resalePrice = originalPrice;
+
+    // Decrease resale price based on kilometers driven
+    resalePrice -= kilometersDriven * 0.9; // Reduce by 0.1 per kilometer
+
+    // Decrease resale price if there are scratches or dents
+    if (scratchesDents === "Yes") {
+        resalePrice -=  50000; // Fixed reduction for scratches/dents
+    }
+
+    // Decrease resale price based on engine condition
+    switch (engineCondition) {
+        case "Excellent":
+            // No decrease for excellent condition
+            break;
+        case "Good":
+            // Decrease resale price for good condition
+            resalePrice -= 50000; // Decrease by 50,000 for good condition
+            break;
+        case "Fair":
+            // Decrease resale price for fair condition
+            resalePrice -= 100000; // Decrease by 100,000 for fair condition
+            break;
+            case "Poor":
+            // Decrease resale price for poor condition
+            resalePrice -= 200000; // Decrease by 200,000 for poor condition
+            break;
+        default:
+            break;
+    }
+
+    // Decrease resale price based on number of drivers
+    resalePrice -= noOfDrivers * 30000; // Reduce by 30000 per driver
+
+    // Ensure resale price does not drop below 80% of original price
+    if (resalePrice < originalPrice * 0.8) {
+        resalePrice = originalPrice * 0.8;
+    }
+
+    return resalePrice;
+}
+
+
+            function updateCarDetails() {
+    const selectedBrand = carBrandSelect.value;
+    const selectedName = carNameSelect.value;
+    const selectedFuelType = fuelTypeSelect.value;
+    const kilometersDriven = parseInt(kilometersDrivenInput.value, 10);
+    const scratchesDents = scratchesDentsSelect.value;
+    const engineCondition = engineConditionSelect.value;
+    const noOfDrivers = parseInt(noOfDriversInput.value, 10);
+
+    errorMessageOutput.textContent = '';
+
+    // Validate inputs
+    if (!selectedBrand || !selectedName || !selectedFuelType || isNaN(kilometersDriven) || isNaN(noOfDrivers)) {
+        errorMessageOutput.textContent = 'Please fill in all fields correctly.';
+        return;
+    }
+
+    const car = cars.find(car =>
+        car.brand === selectedBrand &&
+        car.name === selectedName
+    );
+
+    if (car) {
+        if (car.fuelType === selectedFuelType) {
+            const adjustedResalePrice = calculateResalePrice(car.originalPrice, kilometersDriven, scratchesDents, engineCondition, noOfDrivers);
+            releaseDateOutput.textContent = `Release Date: ${car.releaseDate}`;
+            originalPriceOutput.textContent = `Original Price: ₹${car.originalPrice.toLocaleString()}`;
+            resalePriceOutput.textContent = `Resale Price: ₹${adjustedResalePrice.toLocaleString()}`;
+        } else {
+            errorMessageOutput.textContent = `This car is only available with ${car.fuelType} fuel type. Please select the correct fuel type.`;
+            releaseDateOutput.textContent = '';
+            originalPriceOutput.textContent = '';
+            resalePriceOutput.textContent = '';
+
+        }
+    } else {
+        errorMessageOutput.textContent = 'Car not found.';
+        releaseDateOutput.textContent = '';
+        originalPriceOutput.textContent = '';
+        resalePriceOutput.textContent = '';
+
+    }
+}
+
+
+            carBrandSelect.addEventListener('change', (event) => {
+                populateCarNames(event.target.value);
+            });
+
+            findPricesButton.addEventListener('click', updateCarDetails);
+
+            populateCarBrands();
+        });
+    </script>
+</body>
+</html>
+
+login
+
+
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+    }
+    
+    section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        width: 100%;
+        background: url("car-background.jpg") no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+    
+    .form-box {
+        position: relative;
+        width: 400px;
+        height: 450px;
+        background: transparent;
+        border: none;
+        border-radius: 20px;
+        backdrop-filter: blur(15px) brightness(80%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    h2 {
+        font-size: 2em;
+        color: #fff;
+        text-align: center;
+    }
+    
+    .inputbox {
+        position: relative;
+        margin: 30px 0;
+        width: 310px;
+        border-bottom: 2px solid #fff;
+    }
+    
+    .inputbox label {
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+        color: #fff;
+        font-size: 1em;
+        pointer-events: none;
+        transition: 0.5s;
+    }
+    
+    /* animations: start */
+    input:focus~label,
+    input:valid~label {
+        top: -5px;
+    }
+    
+    /* animation:end */
+    .inputbox input {
+        width: 100%;
+        height: 50px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 1em;
+        padding: 0 35px 0 5px;
+        color: #fff;
+    }
+    
+    .inputbox ion-icon {
+        position: absolute;
+        right: 8px;
+        color: #fff;
+        font-size: 1.2em;
+        top: 20px;
+    }
+    
+    .forget {
+        margin: -10px 0 17px;
+        font-size: 0.9em;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .forget label input {
+        margin-right: 3px;
+    }
+    
+    .forget a {
+        color: #fff;
+        text-decoration: none;
+    }
+    
+    .forget a:hover {
+        text-decoration: underline;
+    }
+    
+    button {
+        width: 100%;
+        height: 40px;
+        border-radius: 40px;
+        background-color: #fff;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+    }
+    
+    .register {
+        font-size: 0.9em;
+        color: #fff;
+        text-align: center;
+        margin: 25px 0 10px;
+    }
+    
+    .register p a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 600;
+    }
+    
+    .register p a:hover {
+        text-decoration: underline;
+    }
+    
+    @media screen and (max-width: 480px) {
+        .form-box {
+            width: 100%;
+            border-radius: 0px;
+        }
+    }
+    </style>
+</head>
+
+<body>
+
+    <body>
+        <section>
+            <div class="form-box">
+                <div class="form-value">
+                    <form>
+                        <h2>Login</h2>
+                        <div class="inputbox"> <ion-icon name="mail-outline"></ion-icon> <input type="email" required>
+                            <label>Email</label>
+                        </div>
+                        <div class="inputbox"> <ion-icon name="lock-closed-outline"></ion-icon> <input type="password"
+                                required> <label>Password</label> </div>
+                        <div class="forget"> <label><input type="checkbox">Remember Me</label> <a href="#">Forgot
+                                Password</a> </div> <button>Log In</button>
+                        <div class="register">
+                            <p>Don't have an account? <a href="#">Sign Up</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section> 
+    </body>
+</body>
+
+</html>
+
+
+
+if (!sessionStorage.getItem('loggedIn')) {
+    window.location.href = 'login.html'; // Redirect to login if not logged in
+    
+    
+    
+    const express = require('express');
+const path = require('path');
+const app = express();
+
+// Serve static files from the 'public' folder (like CSS, JS, images)
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Route to serve the index.html file for the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Set the port to 3000 or the environment's port
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

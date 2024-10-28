@@ -1,0 +1,17 @@
+#compare-cars-button {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #0056b3; /* Button background color */
+    color: #ffffff; /* Text color */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: background-color 0.3s, transform 0.3s; /* Animation */
+}
+
+#compare-cars-button:hover {
+    background-color: #003d7a; /* Darker background on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+}

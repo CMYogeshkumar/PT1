@@ -1,0 +1,4 @@
+const isAuthenticated = localStorage.getItem('userEmail') && localStorage.getItem('userPassword');
+    if (!isAuthenticated) {
+        window.location.href = 'login.html';
+    }
